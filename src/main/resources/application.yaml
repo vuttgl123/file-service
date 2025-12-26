@@ -1,3 +1,17 @@
 spring:
   application:
     name: file-service
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://dpg-d57aoi1r0fns73fjak70-a.singapore-postgres.render.com:5432/file_service_1eai?sslmode=require
+    username: file_service_1eai_user
+    password: Q95EyOe6YDjh4UBmQPe5hHcpmxCf20j3
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
