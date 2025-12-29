@@ -47,3 +47,4 @@ app:
     secretKey:
     bucket:
     presignPutExpirySeconds: 600
+    publicBaseUrl:

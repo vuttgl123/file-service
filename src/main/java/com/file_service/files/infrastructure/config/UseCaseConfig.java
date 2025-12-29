@@ -1,7 +1,11 @@
 package com.file_service.files.infrastructure.config;
 
 import com.file_service.files.application.assets.confirm.ConfirmAssetUseCase;
+import com.file_service.files.application.assets.delete.DeleteAssetUseCase;
+import com.file_service.files.application.assets.delete.DeleteAssetValidator;
 import com.file_service.files.application.assets.presign.PresignUploadUseCase;
+import com.file_service.files.application.assets.query.GetAssetUrlUseCase;
+import com.file_service.files.application.assets.query.GetAssetUrlValidator;
 import com.file_service.files.domain.ports.AssetRepository;
 import com.file_service.files.domain.ports.StoragePort;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,5 +42,29 @@ public class UseCaseConfig {
             AssetRepository assetRepository
     ) {
         return new ConfirmAssetUseCase(assetRepository);
+    }
+
+    @Bean
+    public GetAssetUrlUseCase getAssetUrlUseCase(
+            AssetRepository assetRepository,
+            StoragePort storagePort
+    ) {
+        return new GetAssetUrlUseCase(
+                assetRepository,
+                storagePort,
+                new GetAssetUrlValidator()
+        );
+    }
+
+    @Bean
+    public DeleteAssetUseCase deleteAssetUseCase(
+            AssetRepository assetRepository,
+            StoragePort storagePort
+    ) {
+        return new DeleteAssetUseCase(
+                assetRepository,
+                storagePort,
+                new DeleteAssetValidator()
+        );
     }
 }

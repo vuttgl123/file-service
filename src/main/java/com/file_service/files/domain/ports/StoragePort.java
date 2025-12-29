@@ -6,6 +6,10 @@ public interface StoragePort {
 
     PresignedPut presignPut(PresignPutRequest request);
 
+    String resolvePublicUrl(String bucket, String objectKey);
+
+    void deleteObject(String bucket, String objectKey);
+
     record PresignPutRequest(
             String bucket,
             String objectKey,

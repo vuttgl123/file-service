@@ -8,7 +8,7 @@ import java.util.UUID;
 public final class AssetId extends AbstractValueObject {
     private final String value;
 
-    private AssetId(String value) {
+    public AssetId(String value) {
         this.value = value;
         validate();
     }
