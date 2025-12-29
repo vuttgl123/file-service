@@ -10,6 +10,11 @@ public class ValidationException extends RuntimeException {
         this.errors = Collections.singletonList(message);
     }
 
+    public ValidationException(String message, Throwable cause) {
+        super(message, cause);
+        this.errors = Collections.singletonList(message);
+    }
+
     public ValidationException(List<String> errors) {
         super("Validation failed: " + String.join(", ", errors));
         this.errors = new ArrayList<>(errors);
