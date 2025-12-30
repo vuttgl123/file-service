@@ -1,9 +1,11 @@
 package com.file_service.files.domain.model;
 
 import com.file_service.shared.domain.AbstractValueObject;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public final class AssetMetadata extends AbstractValueObject {
     private static final int MAX_IMAGE_DIMENSION = 4096;
     private static final double MAX_VIDEO_DURATION_SEC = 180.0; // 3 minutes
@@ -34,30 +36,6 @@ public final class AssetMetadata extends AbstractValueObject {
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public Long getSizeBytes() {
-        return sizeBytes;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public Double getDurationSec() {
-        return durationSec;
-    }
-
-    public String getChecksum() {
-        return checksum;
     }
 
     public boolean hasChecksum() {

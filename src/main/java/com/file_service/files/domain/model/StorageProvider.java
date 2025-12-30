@@ -1,8 +1,11 @@
 package com.file_service.files.domain.model;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Getter
 public enum StorageProvider {
     R2("r2", "Cloudflare R2"),
     MINIO("minio", "MinIO"),
@@ -14,14 +17,6 @@ public enum StorageProvider {
     StorageProvider(String value, String displayName) {
         this.value = value;
         this.displayName = displayName;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getDisplayName() {
-        return displayName;
     }
 
     public boolean isR2() {

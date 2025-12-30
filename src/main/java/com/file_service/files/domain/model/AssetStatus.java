@@ -1,8 +1,11 @@
 package com.file_service.files.domain.model;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Getter
 public enum AssetStatus {
     PENDING("pending"),
 
@@ -14,10 +17,6 @@ public enum AssetStatus {
 
     AssetStatus(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public boolean isPending() {

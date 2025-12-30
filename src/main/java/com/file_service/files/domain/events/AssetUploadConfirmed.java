@@ -1,7 +1,9 @@
 package com.file_service.files.domain.events;
 
 import com.file_service.shared.domain.AbstractDomainEvent;
+import lombok.Getter;
 
+@Getter
 public class AssetUploadConfirmed extends AbstractDomainEvent {
     private final String assetId;
     private final String assetType;
@@ -42,46 +44,6 @@ public class AssetUploadConfirmed extends AbstractDomainEvent {
     @Override
     public String aggregateId() {
         return assetId;
-    }
-
-    public String getAssetId() {
-        return assetId;
-    }
-
-    public String getAssetType() {
-        return assetType;
-    }
-
-    public String getBucket() {
-        return bucket;
-    }
-
-    public String getObjectKey() {
-        return objectKey;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public Long getSizeBytes() {
-        return sizeBytes;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public Double getDurationSec() {
-        return durationSec;
-    }
-
-    public String getChecksum() {
-        return checksum;
     }
 
     @Override

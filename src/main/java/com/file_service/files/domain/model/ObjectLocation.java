@@ -1,9 +1,11 @@
 package com.file_service.files.domain.model;
 
 import com.file_service.shared.domain.AbstractValueObject;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public final class ObjectLocation extends AbstractValueObject {
     private final String bucket;
     private final String objectKey;
@@ -16,14 +18,6 @@ public final class ObjectLocation extends AbstractValueObject {
 
     public static ObjectLocation of(String bucket, String objectKey) {
         return new ObjectLocation(bucket, objectKey);
-    }
-
-    public String getBucket() {
-        return bucket;
-    }
-
-    public String getObjectKey() {
-        return objectKey;
     }
 
     public String getFullPath() {

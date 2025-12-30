@@ -8,7 +8,7 @@ import com.file_service.files.application.assets.delete.DeleteAssetUseCase;
 import com.file_service.files.application.assets.presign.PresignUploadCommand;
 import com.file_service.files.application.assets.presign.PresignUploadResult;
 import com.file_service.files.application.assets.presign.PresignUploadUseCase;
-import com.file_service.files.application.assets.query.GetAssetUrlQueryCommand;
+import com.file_service.files.application.assets.query.GetAssetUrlQuery;
 import com.file_service.files.application.assets.query.GetAssetUrlResult;
 import com.file_service.files.application.assets.query.GetAssetUrlUseCase;
 import org.springframework.http.HttpStatus;
@@ -50,23 +50,14 @@ public class AssetController {
 
     @GetMapping("/{assetId}/url")
     @ResponseStatus(HttpStatus.OK)
-    public GetAssetUrlResponse getAssetUrl(@PathVariable String assetId) {
-        GetAssetUrlResult result = getAssetUrlUseCase.handle(new GetAssetUrlQueryCommand(assetId));
-        return GetAssetUrlResponse.from(result);
+    public GetAssetUrlResult getAssetUrl(@PathVariable String assetId) {
+        return getAssetUrlUseCase.execute(new GetAssetUrlQuery(assetId));
     }
 
     @DeleteMapping("/{assetId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAsset(@PathVariable String assetId) {
-        deleteAssetUseCase.handle(new DeleteAssetCommand(assetId));
+        deleteAssetUseCase.execute(new DeleteAssetCommand(assetId));
     }
 
-    public record GetAssetUrlResponse(String assetId, String publicUrl) {
-        public static GetAssetUrlResponse from(GetAssetUrlResult result) {
-            return new GetAssetUrlResponse(
-                    result.assetId(),
-                    result.publicUrl()
-            );
-        }
-    }
 }

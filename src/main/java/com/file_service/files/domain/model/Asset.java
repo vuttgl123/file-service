@@ -1,12 +1,15 @@
 package com.file_service.files.domain.model;
 
+import com.file_service.files.domain.events.AssetDeleted;
 import com.file_service.files.domain.events.AssetUploadConfirmed;
 import com.file_service.files.domain.events.AssetUploadFailed;
 import com.file_service.files.domain.events.AssetUploadInitiated;
 import com.file_service.shared.domain.AggregateRoot;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public class Asset extends AggregateRoot<AssetId> {
     private AssetType type;
     private AssetStatus status;
@@ -112,6 +115,16 @@ public class Asset extends AggregateRoot<AssetId> {
         ));
     }
 
+
+    public void markForDeletion() {
+        registerEvent(new AssetDeleted(
+                getId().getValue(),
+                type.getValue(),
+                location.getBucket(),
+                location.getObjectKey()
+        ));
+    }
+
     public boolean isPending() {
         return status.isPending();
     }
@@ -146,26 +159,6 @@ public class Asset extends AggregateRoot<AssetId> {
 
     public String getFileExtension() {
         return location.getFileExtension();
-    }
-
-    public AssetType getType() {
-        return type;
-    }
-
-    public AssetStatus getStatus() {
-        return status;
-    }
-
-    public StorageProvider getStorageProvider() {
-        return storageProvider;
-    }
-
-    public ObjectLocation getLocation() {
-        return location;
-    }
-
-    public AssetMetadata getMetadata() {
-        return metadata;
     }
 
     @Override

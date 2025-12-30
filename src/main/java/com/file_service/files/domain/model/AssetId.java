@@ -1,10 +1,12 @@
 package com.file_service.files.domain.model;
 
 import com.file_service.shared.domain.AbstractValueObject;
+import lombok.Getter;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public final class AssetId extends AbstractValueObject {
     private final String value;
 
@@ -26,10 +28,6 @@ public final class AssetId extends AbstractValueObject {
             throw new IllegalArgumentException("UUID cannot be null");
         }
         return new AssetId(uuid.toString());
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public UUID toUUID() {

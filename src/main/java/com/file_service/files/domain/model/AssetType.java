@@ -1,9 +1,12 @@
 package com.file_service.files.domain.model;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 public enum AssetType {
     IMAGE("image", Set.of(
             "image/jpeg",
@@ -26,18 +29,6 @@ public enum AssetType {
         this.value = value;
         this.allowedMimeTypes = allowedMimeTypes;
         this.maxSizeBytes = maxSizeBytes;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public Set<String> getAllowedMimeTypes() {
-        return allowedMimeTypes;
-    }
-
-    public long getMaxSizeBytes() {
-        return maxSizeBytes;
     }
 
     public boolean isMimeTypeAllowed(String mimeType) {
