@@ -16,30 +16,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 
-#  datasource:
-#    url: jdbc:mariadb://10.210.40.40:3306/file_service
-#    username: kyc_uat
-#    password: ILoveKYC
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    hikari:
-#      maximum-pool-size: 5
-#      minimum-idle: 2
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: none
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MariaDBDialect
-#        format_sql: false
-#        show_sql: false
-#        jdbc:
-#          batch_size: 20
-#          batch_versioned_data: true
-#        order_inserts: true
-#        order_updates: true
-#    open-in-view: false
-
 app:
   r2:
     endpoint:
@@ -48,3 +24,22 @@ app:
     bucket:
     presignPutExpirySeconds: 600
     publicBaseUrl:
+    presignExpiry:
+
+  cleanup:
+    pending-assets-threshold-minutes: 60
+    cron: 0 0 * * * *
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    default-models-expand-depth: 3
+    default-model-expand-depth: 3
+  show-actuator: false

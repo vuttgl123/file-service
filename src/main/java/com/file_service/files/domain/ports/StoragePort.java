@@ -8,6 +8,8 @@ public interface StoragePort {
 
     String resolvePublicUrl(String bucket, String objectKey);
 
+    boolean objectExists(String bucket, String objectKey);
+
     void deleteObject(String bucket, String objectKey);
 
     record PresignPutRequest(

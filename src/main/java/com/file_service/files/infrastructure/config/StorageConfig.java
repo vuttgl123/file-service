@@ -9,7 +9,6 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.net.URI;
@@ -18,54 +17,57 @@ import java.time.Duration;
 @Configuration
 public class StorageConfig {
 
+    @Value("${app.r2.accountId}")
+    private String accountId;
+
+    @Value("${app.r2.accessKeyId}")
+    private String accessKeyId;
+
+    @Value("${app.r2.secretAccessKey}")
+    private String secretAccessKey;
+
+    @Value("${app.r2.bucket}")
+    private String bucket;
+
+    @Value("${app.r2.publicBaseUrl}")
+    private String publicBaseUrl;
+
+    @Value("${app.r2.presignExpiry:PT15M}")
+    private Duration presignExpiry;
+
     @Bean
-    public S3Presigner r2Presigner(
-            @Value("${app.r2.endpoint}") String endpoint,
-            @Value("${app.r2.accessKey}") String accessKey,
-            @Value("${app.r2.secretKey}") String secretKey
-    ) {
-        return S3Presigner.builder()
+    public S3Client s3Client() {
+        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", accountId);
+
+        return S3Client.builder()
+                .region(Region.of("auto"))
                 .endpointOverride(URI.create(endpoint))
-                .region(Region.US_EAST_1)
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey))
-                )
-                .serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(true)
-                        .build())
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(accessKeyId, secretAccessKey)
+                ))
                 .build();
     }
 
     @Bean
-    public StoragePort storagePort(
-            S3Presigner r2Presigner,
-            S3Client r2S3Client,
-            @Value("${app.r2.presignPutExpirySeconds:600}") long expirySeconds,
-            @Value("${app.r2.publicBaseUrl:}") String publicBaseUrl
-    ) {
+    public S3Presigner s3Presigner() {
+        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", accountId);
+
+        return S3Presigner.builder()
+                .region(Region.of("auto"))
+                .endpointOverride(URI.create(endpoint))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(accessKeyId, secretAccessKey)
+                ))
+                .build();
+    }
+
+    @Bean
+    public StoragePort storagePort(S3Presigner presigner, S3Client s3Client) {
         return new R2StorageAdapter(
-                r2Presigner,
-                r2S3Client,
-                Duration.ofSeconds(expirySeconds),
+                presigner,
+                s3Client,
+                presignExpiry,
                 publicBaseUrl
         );
-    }
-
-    @Bean
-    public S3Client r2S3Client(
-            @Value("${app.r2.endpoint}") String endpoint,
-            @Value("${app.r2.accessKey}") String accessKey,
-            @Value("${app.r2.secretKey}") String secretKey
-    ) {
-        return S3Client.builder()
-                .endpointOverride(URI.create(endpoint))
-                .region(Region.US_EAST_1)
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey))
-                )
-                .serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(true)
-                        .build())
-                .build();
     }
 }
