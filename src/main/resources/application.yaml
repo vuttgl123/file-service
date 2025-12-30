@@ -1,6 +1,8 @@
 spring:
   application:
     name: file-service
+  profiles:
+    active: prod
 
   datasource:
     driver-class-name: org.postgresql.Driver

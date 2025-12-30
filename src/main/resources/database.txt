@@ -1,0 +1,68 @@
+-- Migration: Initialize assets table for File Service
+-- Version: V1__init_assets_table.sql
+
+SET search_path TO public;
+
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Create enum types
+CREATE TYPE public.asset_type AS ENUM ('image', 'video');
+CREATE TYPE public.asset_status AS ENUM ('pending', 'confirmed', 'failed');
+
+-- Create assets table
+CREATE TABLE IF NOT EXISTS public.assets (
+    id           UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    type         public.asset_type NOT NULL,
+    status       TEXT NOT NULL DEFAULT 'pending',
+    storage      TEXT NOT NULL DEFAULT 'r2',
+    bucket       TEXT NOT NULL,
+    object_key   TEXT NOT NULL,
+    mime_type    TEXT,
+    size_bytes   BIGINT CHECK (size_bytes IS NULL OR size_bytes >= 0),
+    width        INT CHECK (width IS NULL OR width >= 0),
+    height       INT CHECK (height IS NULL OR height >= 0),
+    duration_sec NUMERIC(10,3) CHECK (duration_sec IS NULL OR duration_sec >= 0),
+    checksum     TEXT,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+    version      BIGINT NOT NULL DEFAULT 0,
+
+    CONSTRAINT uq_assets_bucket_object UNIQUE (bucket, object_key),
+    CONSTRAINT chk_asset_status CHECK (status IN ('pending', 'confirmed', 'failed'))
+);
+
+-- Create indexes
+CREATE INDEX idx_assets_type ON public.assets(type);
+CREATE INDEX idx_assets_status ON public.assets(status);
+CREATE INDEX idx_assets_status_created ON public.assets(status, created_at);
+
+-- Create trigger function for updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create trigger
+CREATE TRIGGER update_assets_updated_at
+    BEFORE UPDATE ON public.assets
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Add comments for documentation
+COMMENT ON TABLE public.assets IS 'File assets stored in cloud storage (Cloudflare R2)';
+COMMENT ON COLUMN public.assets.type IS 'Asset type: image or video';
+COMMENT ON COLUMN public.assets.status IS 'Asset lifecycle status: pending, confirmed, or failed';
+COMMENT ON COLUMN public.assets.storage IS 'Storage provider: r2, minio, or s3';
+COMMENT ON COLUMN public.assets.bucket IS 'Storage bucket name';
+COMMENT ON COLUMN public.assets.object_key IS 'Object key/path in storage';
+COMMENT ON COLUMN public.assets.mime_type IS 'MIME type of the file';
+COMMENT ON COLUMN public.assets.size_bytes IS 'File size in bytes';
+COMMENT ON COLUMN public.assets.width IS 'Image/video width in pixels (optional)';
+COMMENT ON COLUMN public.assets.height IS 'Image/video height in pixels (optional)';
+COMMENT ON COLUMN public.assets.duration_sec IS 'Video duration in seconds (optional)';
+COMMENT ON COLUMN public.assets.checksum IS 'File checksum for integrity verification (optional)';
+COMMENT ON COLUMN public.assets.version IS 'Optimistic locking version number';

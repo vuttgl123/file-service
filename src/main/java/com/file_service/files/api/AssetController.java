@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +79,7 @@ public class AssetController {
     })
     @PostMapping("/presign")
     @ResponseStatus(HttpStatus.CREATED)
+    @Profile({"local", "dev"})
     public PresignUploadResult presign(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Upload request details",
@@ -139,6 +141,7 @@ public class AssetController {
     })
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.OK)
+    @Profile({"local", "dev"})
     public ConfirmAssetResult confirm(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Asset confirmation with metadata",
@@ -233,6 +236,7 @@ public class AssetController {
     })
     @DeleteMapping("/{assetId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Profile({"local", "dev"})
     public void deleteAsset(
             @Parameter(description = "Asset ID (UUID)", required = true, example = "550e8400-e29b-41d4-a716-446655440000")
             @PathVariable String assetId
