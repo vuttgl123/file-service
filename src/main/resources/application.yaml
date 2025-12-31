@@ -2,7 +2,10 @@ spring:
   application:
     name: file-service
   profiles:
-    active: prod
+    active: dev
+  output:
+    ansi:
+      enabled: ALWAYS
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -18,15 +21,38 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 
+#  datasource:
+#    url: jdbc:mariadb://10.210.40.40:3306/file_service
+#    username: kyc_uat
+#    password: ILoveKYC
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    hikari:
+#      maximum-pool-size: 5
+#      minimum-idle: 2
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: none
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MariaDBDialect
+#        format_sql: false
+#        show_sql: false
+#        jdbc:
+#          batch_size: 20
+#          batch_versioned_data: true
+#        order_inserts: true
+#        order_updates: true
+#    open-in-view: false
+
 app:
   r2:
-    endpoint:
-    accessKey:
-    secretKey:
-    bucket:
-    presignPutExpirySeconds: 600
-    publicBaseUrl:
-    presignExpiry:
+    accountId: your_account_id
+    accessKeyId: your_access_key
+    secretAccessKey: your_secret_key
+    bucket: your_bucket
+    publicBaseUrl: https://your-public-url
+    presignExpiry: PT15M
 
   cleanup:
     pending-assets-threshold-minutes: 60

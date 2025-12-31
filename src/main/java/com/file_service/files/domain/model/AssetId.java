@@ -1,12 +1,14 @@
 package com.file_service.files.domain.model;
 
 import com.file_service.shared.domain.AbstractValueObject;
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Getter
+@Embeddable
 public final class AssetId extends AbstractValueObject {
     private final String value;
 

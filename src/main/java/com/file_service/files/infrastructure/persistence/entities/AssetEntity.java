@@ -25,9 +25,8 @@ import java.time.Instant;
 public class AssetEntity {
 
     @Getter
-    @Id
     @Column(name = "id", nullable = false, updatable = false)
-    @Convert(converter = AssetIdConverter.class)
+    @EmbeddedId
     private AssetId id;
 
     @Getter
