@@ -1,0 +1,7 @@
+1. GET Presigned URL từ File Service
+   ↓
+2. Upload file trực tiếp lên R2 (bypass server)
+   ↓
+3. Confirm upload với File Service
+
+
