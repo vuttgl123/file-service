@@ -3,9 +3,6 @@ package com.file_service.shared.domain;
 import java.time.Instant;
 import java.util.UUID;
 
-import java.time.Instant;
-import java.util.UUID;
-
 public abstract class AbstractDomainEvent implements DomainEvent {
     private final String eventId;
     private final Instant occurredAt;
